@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
     [ReadOnly]
     [SerializeField]
     private GameState _gameState;
+    public DynamicJoystick joystick;
     public GameState gameState
     {
         get { return _gameState; }
@@ -66,4 +67,19 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
+    public void Lose()
+    {
+        gameState = GameState.Lose;
+        
+        //Lose Conditions
+    }
+    public void Win()
+    {
+        gameState = GameState.Win;
+        PlayerPrefs.SetInt("levelIndex", PlayerPrefs.GetInt("levelIndex") + 1);
+         //Win Conditions
+    }
+
+
+
 }

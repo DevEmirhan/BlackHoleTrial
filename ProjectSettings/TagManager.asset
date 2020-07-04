@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Enemy
   - Ground
+  - GoodObjects
+  - BadObjects
+  - GoodObjects2
+  - TransitionObject
   layers:
   - Default
   - TransparentFX
