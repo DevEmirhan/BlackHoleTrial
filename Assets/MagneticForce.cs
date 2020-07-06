@@ -15,7 +15,12 @@ public class MagneticForce : MonoBehaviour
     {
         foreach (Rigidbody rgbBal in rbObjects)
         {
-            rgbBal.AddForce((magnetPoint.position - rgbBal.position) * forceFactor * Time.fixedDeltaTime);
+            if (rgbBal != null)
+            {
+                rgbBal.AddForce((magnetPoint.position - rgbBal.position) * forceFactor * Time.fixedDeltaTime);
+            }
+            else { return; }
+           
         }
     }
     void OnTriggerEnter(Collider other)

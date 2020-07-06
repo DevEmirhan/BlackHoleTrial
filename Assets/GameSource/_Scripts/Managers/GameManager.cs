@@ -23,6 +23,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameState _gameState;
     public DynamicJoystick joystick;
+    public int coinsPerLevel = 100;
+    
     public GameState gameState
     {
         get { return _gameState; }
@@ -46,12 +48,14 @@ public class GameManager : Singleton<GameManager>
                         break;
                     case GameState.Play:
                         //---------------------------------------------------------------------------Start
-
+                        FindObjectOfType<PlayerController>().isInputGet = true;
                         //---------------------------------------------------------------------------End
                         break;
                     case GameState.Win:
                         SaveManager.Save("RandomLevelIndex", -1);
                         SaveManager.Save("LevelIndex", SaveManager.GetSaveDataInt("LevelIndex") + 1);
+                        PlayerPrefs.SetInt("levelIndex", PlayerPrefs.GetInt("levelIndex") + 1);
+                        PlayerPrefs.SetInt("coinCount", PlayerPrefs.GetInt("coinCount") + coinsPerLevel);
                         UIManager.Instance.ShowWinPanel();
                         //---------------------------------------------------------------------------Start
                         
@@ -76,8 +80,8 @@ public class GameManager : Singleton<GameManager>
     public void Win()
     {
         gameState = GameState.Win;
-        PlayerPrefs.SetInt("levelIndex", PlayerPrefs.GetInt("levelIndex") + 1);
-         //Win Conditions
+        
+        //Win Conditions
     }
 
 

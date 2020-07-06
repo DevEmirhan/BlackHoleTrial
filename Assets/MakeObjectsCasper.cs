@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class MakeObjectsCasper : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private PlayerController playerController;
+    private void Start()
+    {
+        playerController = FindObjectOfType<PlayerController>();
+    }
     private void OnCollisionEnter(Collision collision)
     {
         
@@ -12,25 +16,46 @@ public class MakeObjectsCasper : MonoBehaviour
             if(collision.gameObject.tag == "GoodObjects")
             {
                 collision.gameObject.GetComponent<Collider>().isTrigger = true;
-                PlayerController.Instance.GoodObjects.Remove(collision.gameObject);
+            UIManager.Instance.slider1.value += playerController.valueOfStage1;
+            playerController.GoodObjects.Remove(collision.gameObject);
+              if(UIManager.Instance.vibrateToggle.isOn == true)
+            {
+                
+                Handheld.Vibrate();
+            }
+            
                 Destroy(collision.gameObject, .5f);
             }
             else if (collision.gameObject.tag == "GoodObjects2")
             {
                 collision.gameObject.GetComponent<Collider>().isTrigger = true;
-                PlayerController.Instance.GoodObjects2.Remove(collision.gameObject);
-                Destroy(collision.gameObject, .5f);
+            UIManager.Instance.slider2.value += playerController.valueOfStage2;
+            playerController.GoodObjects2.Remove(collision.gameObject);
+            if (UIManager.Instance.vibrateToggle.isOn == true)
+            {
+                Handheld.Vibrate();
             }
-            else if(collision.gameObject.tag == "BadObjects" && !PlayerController.Instance.isAnimationActive)
+           
+            Destroy(collision.gameObject, .5f);
+            }
+            else if(collision.gameObject.tag == "BadObjects" && !playerController.isAnimationActive)
             {
                 collision.gameObject.GetComponent<Collider>().isTrigger = true;
-                PlayerController.Instance.BadObjects.Remove(collision.gameObject);
-                Destroy(collision.gameObject, .5f);
+                playerController.BadObjects.Remove(collision.gameObject);
+            if (UIManager.Instance.vibrateToggle.isOn == true)
+            {
+                Handheld.Vibrate();
+            }
+            Destroy(collision.gameObject, .5f);
             }
             else if(collision.gameObject.tag == "TransitionObject")
             {
                 collision.gameObject.GetComponent<Collider>().isTrigger = true;
-                Destroy(collision.gameObject, .5f);
+            if (UIManager.Instance.vibrateToggle.isOn == true)
+            {
+                Handheld.Vibrate();
+            }
+            Destroy(collision.gameObject, .5f);
             }
             else { return; }
             

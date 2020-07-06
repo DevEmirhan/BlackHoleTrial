@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 using System.Security.Cryptography;
+using UnityEngine.UI;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : MonoBehaviour
 {
     public float speed;
     private Joystick joystick;
@@ -13,25 +14,39 @@ public class PlayerController : Singleton<PlayerController>
     public Animator gfxAnimator;
     public GameObject walkIndicator;
     private int checkBadObject;
-    public Camera mainCamera;
     public bool FirstStage = true;
     public bool isAnimationActive = false;
     public GameObject StageGate;
     public ParticleSystem Confetti;
+
+    [Header("About Color")][Space(5)]
+    public GameObject colorfulPart;
+   public Material[] colors;
+    [Header("About Progress Bar")][Space(5)]
     
+    public float valueOfStage1;
+    public float valueOfStage2;
+    
+
 
     [Header("Level Objects")][Space(5)]
     public List<GameObject> GoodObjects;
     public List<GameObject> GoodObjects2;
     public List<GameObject> BadObjects;
+   
 
     
     
     void Start()
     {
-        isInputGet = true;
+        
+        isInputGet = false;
         joystick = GameManager.Instance.joystick;
         checkBadObject = BadObjects.Count;
+        int currentColor = PlayerPrefs.GetInt("PlayerColor");
+        colorfulPart.GetComponent<SpriteRenderer>().color = colors[currentColor].color;
+        valueOfStage1 = 100/ GoodObjects.Count;
+        valueOfStage2 = 100/ GoodObjects2.Count;
 
     }
     void Update()
@@ -53,6 +68,7 @@ public class PlayerController : Singleton<PlayerController>
             {
                
                 walkIndicator.transform.position = new Vector3(transform.position.x, walkIndicator.transform.position.y, transform.position.z);
+                
             }
             
 
@@ -73,6 +89,7 @@ public class PlayerController : Singleton<PlayerController>
         if (isAnimationActive)
         {
             isInputGet = false;
+            transform.forward = Vector3.zero;
         }
 
 
@@ -80,7 +97,7 @@ public class PlayerController : Singleton<PlayerController>
         if (GoodObjects.Count == 0 && FirstStage)
         {
             isAnimationActive = true;
-            transform.DOLocalMoveX( 0f , 2f, false).OnComplete(MoveToNextStage).SetId("tween1");
+            transform.DOLocalMoveX(0f, 2f, false).OnComplete(MoveToNextStage).SetId("tween1");
             StageGate.transform.DOLocalMoveY(-.6f, 2f, false).SetId("tween2");
           
             
@@ -107,20 +124,21 @@ public class PlayerController : Singleton<PlayerController>
             isInputGet = false;
             if (GameManager.Instance.gameState != GameState.Lose)
             {
-                mainCamera.DOShakePosition(.75f, .5f, 10, 90, true);
+                Camera.main.DOShakePosition(.75f, .5f, 10, 90, true);
             }
             
             GameManager.Instance.Lose();
             Debug.Log("You lost the game");
         }
+   
 
-     
+
     }
     public void MoveToNextStage()
     {
         
         
-        mainCamera.transform.DOMoveZ(32f, 4f).SetEase(Ease.Linear);
+        Camera.main.transform.DOMoveZ(32f, 3.5f).SetEase(Ease.Linear);
         
         transform.DOMoveZ(39f, 4f).OnComplete(NextStage).SetId("Badoom");
     }
@@ -136,6 +154,11 @@ public class PlayerController : Singleton<PlayerController>
         
       
         
+    }
+    public void RefreshColor()
+    {
+        int currentColor = PlayerPrefs.GetInt("PlayerColor");
+        colorfulPart.GetComponent<SpriteRenderer>().color = colors[currentColor].color;
     }
 
 }
