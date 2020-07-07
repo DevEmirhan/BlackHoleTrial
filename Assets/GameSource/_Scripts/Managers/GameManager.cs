@@ -38,6 +38,12 @@ public class GameManager : Singleton<GameManager>
                     case GameState.Start:
 
                         //---------------------------------------------------------------------------Start
+                        Camera.main.transform.position = new Vector3(0f, 30f, -7f);
+                        UIManager.Instance.slider1.value = 0f;
+                        UIManager.Instance.slider2.value = 0f;
+                        UIManager.Instance.levelText.text = (PlayerPrefs.GetInt("levelIndex") + 1).ToString();
+                        UIManager.Instance.nextLevelText.text = (PlayerPrefs.GetInt("levelIndex") + 2).ToString();
+                        UIManager.Instance.coinText.text = PlayerPrefs.GetInt("coinCount").ToString();
 
                         //---------------------------------------------------------------------------End
                         break;
